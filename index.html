@@ -48,7 +48,7 @@
             canvas.style.left = "0";
 
             // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
-            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
+            document.addEventListener('click', enterFullscreenAndLockOrientation);
         }
 
         function onDesktop() {
@@ -60,7 +60,7 @@
             canvas.style.left = "0";
 
             // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
-            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
+            document.addEventListener('click', enterFullscreenAndLockOrientation);
         }
 
         // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
