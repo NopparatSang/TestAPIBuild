@@ -52,11 +52,24 @@
       }
     }
 
+    function handleOrientationChange() {
+      if (window.innerHeight > window.innerWidth) {
+        // Landscape mode required
+        alert('Please rotate your device to landscape mode');
+        // Optionally, you can reload the page or take other actions
+        window.addEventListener('orientationchange', function() {
+          if (window.innerHeight <= window.innerWidth) {
+            location.reload();
+          }
+        });
+      }
+    }
+
     function initialize() {
       openFullscreen();
       setTimeout(lockOrientation, 1000); // Delay to ensure fullscreen is applied before locking orientation
 
-      // Mobile device style
+      // Mobile device handling
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         var meta = document.createElement('meta');
         meta.name = 'viewport';
@@ -70,17 +83,8 @@
 
         document.body.style.textAlign = "left";
 
-        // Check if the device is in landscape mode
-        window.addEventListener('orientationchange', function() {
-          if (window.orientation === 0) {
-            alert('Please rotate your device to landscape mode');
-            window.addEventListener('orientationchange', function() {
-              if (window.orientation !== 0) {
-                location.reload();
-              }
-            });
-          }
-        });
+        // Handle orientation change
+        handleOrientationChange();
       }
     }
 
