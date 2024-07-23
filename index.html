@@ -20,28 +20,31 @@
             top: 0;
             left: 0;
         }
-        #start-button {
-            position: absolute;
-            top: 50%;
-            left: 50%;
-            transform: translate(-50%, -50%);
-            font-size: 20px;
-            padding: 10px 20px;
-            cursor: pointer;
-        }
     </style>
 </head>
 <body>
-    <canvas id="unity-canvas" tabindex="-1" style="display: none;"></canvas>
-    <button id="start-button">Start MyBarStory</button>
+    <canvas id="unity-canvas" tabindex="-1"></canvas>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
-            document.documentElement.requestFullscreen().catch(console.error);
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(console.error);
+            }
         }
 
         function enterLockOrientation() {
             screen.orientation.lock('landscape').catch(console.error);
+        }
+
+        function setupFullscreenAndOrientation() {
+            document.addEventListener('click', () => {
+                enterFullscreen();
+                enterLockOrientation();
+            });
+
+            // Also keep fullscreen mode on other user interactions
+            document.addEventListener('touchstart', enterFullscreen);
+            document.addEventListener('keydown', enterFullscreen);
         }
 
         function onMobile() {
@@ -51,22 +54,27 @@
             document.getElementsByTagName('head')[0].appendChild(meta);
 
             var canvas = document.getElementById('unity-canvas');
-            canvas.style.display = "block";
-            enterFullscreen();
-            enterLockOrientation();
+            canvas.style.width = "100vw";
+            canvas.style.height = "100vh";
+            canvas.style.position = "absolute";
+            canvas.style.top = "0";
+            canvas.style.left = "0";
+
+            setupFullscreenAndOrientation();
         }
 
         function onDesktop() {
             var canvas = document.getElementById('unity-canvas');
-            canvas.style.display = "block";
-            enterFullscreen();
+            canvas.style.width = "100vw";
+            canvas.style.height = "100vh";
+            canvas.style.position = "absolute";
+            canvas.style.top = "0";
+            canvas.style.left = "0";
+
+            setupFullscreenAndOrientation();
         }
 
-        document.getElementById('start-button').addEventListener('click', function() {
-            // Hide the start button
-            document.getElementById('start-button').style.display = 'none';
-
-            // Create Unity instance
+        document.addEventListener('DOMContentLoaded', function() {
             createUnityInstance(document.querySelector("#unity-canvas"), {
                 dataUrl: "Build/TestAPIBuild.data",
                 frameworkUrl: "Build/TestAPIBuild.framework.js",
