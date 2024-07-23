@@ -63,6 +63,7 @@
         }
 
         document.addEventListener('click', enterFullscreenAndLockOrientation);
+        document.addEventListener('DOMContentLoaded', enterFullscreenAndLockOrientation);
 
         // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
