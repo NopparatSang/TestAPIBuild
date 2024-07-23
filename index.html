@@ -39,12 +39,16 @@
         function setupFullscreenAndOrientation() {
             document.addEventListener('click', () => {
                 enterFullscreen();
-                enterLockOrientation();
             });
 
-            // Also keep fullscreen mode on other user interactions
-            document.addEventListener('touchstart', enterFullscreen);
-            document.addEventListener('keydown', enterFullscreen);
+            document.addEventListener('touchstart', () => {
+                enterFullscreen();
+                enterLockOrientation();
+            });
+            document.addEventListener('keydown', () => {
+                enterFullscreen();
+                enterLockOrientation();
+            });
         }
 
         function onMobile() {
