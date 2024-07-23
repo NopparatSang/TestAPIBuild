@@ -45,6 +45,8 @@
             // Also keep fullscreen mode on other user interactions
             document.addEventListener('touchstart', enterFullscreen);
             document.addEventListener('keydown', enterFullscreen);
+            document.addEventListener('touchstart', enterLockOrientation);
+            document.addEventListener('keydown', enterLockOrientation);
         }
 
         function onMobile() {
