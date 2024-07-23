@@ -20,76 +20,31 @@
             top: 0;
             left: 0;
         }
-        #instructions {
-            position: absolute;
-            width: 100%;
-            height: 100%;
-            background: #000;
-            color: #fff;
-            font-size: 24px;
-            text-align: center;
-            align-items: center;
-            justify-content: center;
-            top: 0;
-            left: 0;
-            z-index: 1000;
-            display: flex;
-        }
-        #fullscreen-button {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            padding: 10px 20px;
-            background-color: #007bff;
-            color: #fff;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-            z-index: 1001;
-        }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <div id="instructions">Tap anywhere to enter fullscreen mode and rotate your device to landscape.</div>
-    <button id="fullscreen-button">Enter Fullscreen</button>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
-            const doc = document.documentElement;
-            if (doc.requestFullscreen) {
-                doc.requestFullscreen().catch(console.error);
-            } else if (doc.webkitRequestFullscreen) { // Safari
-                doc.webkitRequestFullscreen();
-            } else if (doc.mozRequestFullScreen) { // Firefox
-                doc.mozRequestFullScreen();
-            } else if (doc.msRequestFullscreen) { // IE/Edge
-                doc.msRequestFullscreen();
+            if (!document.fullscreenElement) {
+                document.documentElement.requestFullscreen().catch(console.error);
             }
         }
 
-        function setupFullscreen() {
+        function enterLockOrientation() {
+            screen.orientation.lock('landscape').catch(console.error);
+        }
+
+        function setupFullscreenAndOrientation() {
             document.addEventListener('click', () => {
                 enterFullscreen();
-                document.getElementById('instructions').style.display = 'none';
+                enterLockOrientation();
             });
 
-            document.getElementById('fullscreen-button').addEventListener('click', () => {
-                enterFullscreen();
-            });
-
+            // Also keep fullscreen mode on other user interactions
             document.addEventListener('touchstart', enterFullscreen);
             document.addEventListener('keydown', enterFullscreen);
-        }
-
-        function handleFullscreenChange() {
-            if (document.fullscreenElement || document.webkitFullscreenElement) {
-                // Fullscreen mode is active
-                console.log("Fullscreen mode is active");
-            } else {
-                // Fullscreen mode is not active
-                console.log("Fullscreen mode is not active");
-            }
         }
 
         function onMobile() {
@@ -105,7 +60,7 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            setupFullscreen();
+            setupFullscreenAndOrientation();
         }
 
         function onDesktop() {
@@ -116,11 +71,9 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            setupFullscreen();
+            setupFullscreenAndOrientation();
         }
 
-        document.addEventListener('fullscreenchange', handleFullscreenChange);
-        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('DOMContentLoaded', function() {
             createUnityInstance(document.querySelector("#unity-canvas"), {
                 dataUrl: "Build/TestAPIBuild.data",
