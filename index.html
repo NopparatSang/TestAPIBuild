@@ -1,91 +1,40 @@
 <!DOCTYPE html>
 <html lang="en-us">
-<head>
+  <head>
     <meta charset="utf-8">
     <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
     <title>Unity WebGL Player | MyBarStory</title>
-    <style>
-        body {
-            margin: 0;
-            padding: 0;
-            overflow: hidden;
-            text-align: center;
-        }
-        canvas {
-            background: #231F20;
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-    </style>
-</head>
-<body>
-    <canvas id="unity-canvas" tabindex="-1"></canvas>
+  </head>
+  <body style="text-align: center; padding: 0; border: 0; margin: 0;">
+    <canvas id="unity-canvas" width=1600 height=900 tabindex="-1" style="width: 1600px; height: 900px; background: #231F20"></canvas>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
-        function enterFullscreenAndLockOrientation() {
-            // เปิดโหมดเต็มหน้าจอ
-            document.documentElement.requestFullscreen().catch(console.error);
+      if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+        // Mobile device style: fill the whole browser client area with the game canvas:
+        var meta = document.createElement('meta');
+        meta.name = 'viewport';
+        meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
+        document.getElementsByTagName('head')[0].appendChild(meta);
 
-            // ล็อคหน้าจอเป็นแนวนอน
-            screen.orientation.lock('landscape').catch(console.error);
-        }
+        var canvas = document.querySelector("#unity-canvas");
+        canvas.style.width = "100%";
+        canvas.style.height = "100%";
+        canvas.style.position = "fixed";
 
-        function onMobile() {
-            var meta = document.createElement('meta');
-            meta.name = 'viewport';
-            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-            document.getElementsByTagName('head')[0].appendChild(meta);
+        document.body.style.textAlign = "left";
+      }
 
-            var canvas = document.getElementById('unity-canvas');
-            canvas.style.width = "100vw";
-            canvas.style.height = "100vh";
-            canvas.style.position = "absolute";
-            canvas.style.top = "0";
-            canvas.style.left = "0";
-
-            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
-            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
-        }
-
-        function onDesktop() {
-            var canvas = document.getElementById('unity-canvas');
-            canvas.style.width = "100vw";
-            canvas.style.height = "100vh";
-            canvas.style.position = "absolute";
-            canvas.style.top = "0";
-            canvas.style.left = "0";
-
-            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
-            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
-        }
-
-        // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            onMobile();
-        } else {
-            onDesktop();
-        }
-
-        // สร้าง Unity instance
-        createUnityInstance(document.querySelector("#unity-canvas"), {
-            dataUrl: "Build/TestAPIBuild.data",
-            frameworkUrl: "Build/TestAPIBuild.framework.js",
-            codeUrl: "Build/TestAPIBuild.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "DefaultCompany",
-            productName: "MyBarStory",
-            productVersion: "0.1",
-            // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-            // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-        }).then((unityInstance) => {
-            console.log("Unity instance created successfully");
-        }).catch((err) => {
-            console.error("Error creating Unity instance:", err);
-        });
+      createUnityInstance(document.querySelector("#unity-canvas"), {
+        dataUrl: "Build/TestAPIBuild.data",
+        frameworkUrl: "Build/TestAPIBuild.framework.js",
+        codeUrl: "Build/TestAPIBuild.wasm",
+        streamingAssetsUrl: "StreamingAssets",
+        companyName: "DefaultCompany",
+        productName: "MyBarStory",
+        productVersion: "0.1",
+        // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+        // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+      });
     </script>
-</body>
+  </body>
 </html>
