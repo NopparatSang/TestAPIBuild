@@ -35,11 +35,24 @@
             z-index: 1000;
             display: flex;
         }
+        #fullscreen-button {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 10px 20px;
+            background-color: #007bff;
+            color: #fff;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            z-index: 1001;
+        }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
     <div id="instructions">Tap anywhere to enter fullscreen mode and rotate your device to landscape.</div>
+    <button id="fullscreen-button">Enter Fullscreen</button>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
@@ -48,6 +61,10 @@
                 doc.requestFullscreen().catch(console.error);
             } else if (doc.webkitRequestFullscreen) { // Safari
                 doc.webkitRequestFullscreen();
+            } else if (doc.mozRequestFullScreen) { // Firefox
+                doc.mozRequestFullScreen();
+            } else if (doc.msRequestFullscreen) { // IE/Edge
+                doc.msRequestFullscreen();
             }
         }
 
@@ -57,8 +74,22 @@
                 document.getElementById('instructions').style.display = 'none';
             });
 
+            document.getElementById('fullscreen-button').addEventListener('click', () => {
+                enterFullscreen();
+            });
+
             document.addEventListener('touchstart', enterFullscreen);
             document.addEventListener('keydown', enterFullscreen);
+        }
+
+        function handleFullscreenChange() {
+            if (document.fullscreenElement || document.webkitFullscreenElement) {
+                // Fullscreen mode is active
+                console.log("Fullscreen mode is active");
+            } else {
+                // Fullscreen mode is not active
+                console.log("Fullscreen mode is not active");
+            }
         }
 
         function onMobile() {
@@ -88,6 +119,8 @@
             setupFullscreen();
         }
 
+        document.addEventListener('fullscreenchange', handleFullscreenChange);
+        document.addEventListener('webkitfullscreenchange', handleFullscreenChange);
         document.addEventListener('DOMContentLoaded', function() {
             createUnityInstance(document.querySelector("#unity-canvas"), {
                 dataUrl: "Build/TestAPIBuild.data",
