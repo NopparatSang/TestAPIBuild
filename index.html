@@ -14,14 +14,24 @@
         }
         canvas {
             background: #231F20;
+            width: 100%;
+            height: 100%;
+            position: fixed;
         }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <button id="fullscreen-button">Enter Fullscreen</button>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
+        function enterFullscreenAndLockOrientation() {
+            // เปิดโหมดเต็มหน้าจอ
+            document.documentElement.requestFullscreen().catch(console.error);
+
+            // ล็อคหน้าจอเป็นแนวนอน
+            screen.orientation.lock('landscape').catch(console.error);
+        }
+
         function onMobile() {
             var meta = document.createElement('meta');
             meta.name = 'viewport';
@@ -33,8 +43,8 @@
             canvas.style.height = "100%";
             canvas.style.position = "fixed";
 
-            // ล็อคการหมุนหน้าจอเป็นแนวนอน
-            screen.orientation.lock('landscape').catch(console.error);
+            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
+            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
         }
 
         function onDesktop() {
@@ -42,11 +52,8 @@
             canvas.style.width = "100%";
             canvas.style.height = "100%";
 
-            // การเปิดโหมดเต็มหน้าจอจะเกิดขึ้นเมื่อผู้ใช้คลิกปุ่ม
-            var fullscreenButton = document.getElementById('fullscreen-button');
-            fullscreenButton.addEventListener('click', function() {
-                document.documentElement.requestFullscreen().catch(console.error);
-            });
+            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
+            document.addEventListener('click', enterFullscreenAndLockOrientation, { once: true });
         }
 
         // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
