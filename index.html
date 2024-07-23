@@ -26,11 +26,11 @@
     <canvas id="unity-canvas" tabindex="-1"></canvas>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
-        function enterFullscreenAndLockOrientation() {
+        function enterFullscreen() {
             // เปิดโหมดเต็มหน้าจอ
             document.documentElement.requestFullscreen().catch(console.error);
-
-            // ล็อคหน้าจอเป็นแนวนอน
+        }
+        function enterLockOrientation() {
             screen.orientation.lock('landscape').catch(console.error);
         }
 
@@ -47,7 +47,8 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
+            document.addEventListener('click', enterFullscreen);
+            document.addEventListener('click', enterLockOrientation);
         }
 
         function onDesktop() {
@@ -58,35 +59,33 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            // เรียกใช้ฟังก์ชันเปิดโหมดเต็มหน้าจอและล็อคแนวนอนเมื่อมีการคลิกที่เอกสาร
-            //document.addEventListener('click', enterFullscreenAndLockOrientation);
+            document.addEventListener('click', enterFullscreen);
         }
 
-        document.addEventListener('click', enterFullscreenAndLockOrientation);
-        document.addEventListener('DOMContentLoaded', enterFullscreenAndLockOrientation);
+        document.addEventListener('DOMContentLoaded', function() {
+            // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
+            if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+                onMobile();
+            } else {
+                onDesktop();
+            }
 
-        // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
-        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-            onMobile();
-        } else {
-            onDesktop();
-        }
-
-        // สร้าง Unity instance
-        createUnityInstance(document.querySelector("#unity-canvas"), {
-            dataUrl: "Build/TestAPIBuild.data",
-            frameworkUrl: "Build/TestAPIBuild.framework.js",
-            codeUrl: "Build/TestAPIBuild.wasm",
-            streamingAssetsUrl: "StreamingAssets",
-            companyName: "DefaultCompany",
-            productName: "MyBarStory",
-            productVersion: "0.1",
-            // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
-            // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
-        }).then((unityInstance) => {
-            console.log("Unity instance created successfully");
-        }).catch((err) => {
-            console.error("Error creating Unity instance:", err);
+            // สร้าง Unity instance
+            createUnityInstance(document.querySelector("#unity-canvas"), {
+                dataUrl: "Build/TestAPIBuild.data",
+                frameworkUrl: "Build/TestAPIBuild.framework.js",
+                codeUrl: "Build/TestAPIBuild.wasm",
+                streamingAssetsUrl: "StreamingAssets",
+                companyName: "DefaultCompany",
+                productName: "MyBarStory",
+                productVersion: "0.1",
+                // matchWebGLToCanvasSize: false, // Uncomment this to separately control WebGL canvas render size and DOM element size.
+                // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
+            }).then((unityInstance) => {
+                console.log("Unity instance created successfully");
+            }).catch((err) => {
+                console.error("Error creating Unity instance:", err);
+            });
         });
     </script>
 </body>
