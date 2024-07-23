@@ -20,10 +20,42 @@
             top: 0;
             left: 0;
         }
+        #rotate-device {
+            display: none;
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: #000;
+            color: #fff;
+            font-size: 24px;
+            text-align: center;
+            align-items: center;
+            justify-content: center;
+            top: 0;
+            left: 0;
+            z-index: 1000;
+        }
+        @media only screen and (orientation: portrait) {
+            #rotate-device {
+                display: flex;
+            }
+            #unity-canvas {
+                display: none;
+            }
+        }
+        @media only screen and (orientation: landscape) {
+            #rotate-device {
+                display: none;
+            }
+            #unity-canvas {
+                display: block;
+            }
+        }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <div id="rotate-device">Please rotate your device to landscape mode.</div>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
@@ -32,21 +64,13 @@
             }
         }
 
-        function enterLockOrientation() {
-            screen.orientation.lock('landscape').catch(console.error);
-        }
-
-        function setupFullscreenAndOrientation() {
+        function setupFullscreen() {
             document.addEventListener('click', () => {
                 enterFullscreen();
-                enterLockOrientation();
             });
 
-            // Also keep fullscreen mode on other user interactions
             document.addEventListener('touchstart', enterFullscreen);
             document.addEventListener('keydown', enterFullscreen);
-            document.addEventListener('touchstart', enterLockOrientation);
-            document.addEventListener('keydown', enterLockOrientation);
         }
 
         function onMobile() {
@@ -62,7 +86,7 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            setupFullscreenAndOrientation();
+            setupFullscreen();
         }
 
         function onDesktop() {
@@ -73,7 +97,7 @@
             canvas.style.top = "0";
             canvas.style.left = "0";
 
-            setupFullscreenAndOrientation();
+            setupFullscreen();
         }
 
         document.addEventListener('DOMContentLoaded', function() {
