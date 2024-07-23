@@ -19,6 +19,7 @@
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <button id="fullscreen-button">Enter Fullscreen</button>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function onMobile() {
@@ -34,9 +35,6 @@
 
             // ล็อคการหมุนหน้าจอเป็นแนวนอน
             screen.orientation.lock('landscape').catch(console.error);
-            
-            // เปิดใช้งานโหมดเต็มหน้าจอ
-            document.documentElement.requestFullscreen().catch(console.error);
         }
 
         function onDesktop() {
@@ -44,8 +42,11 @@
             canvas.style.width = "100%";
             canvas.style.height = "100%";
 
-            // เปิดใช้งานโหมดเต็มหน้าจอ
-            document.documentElement.requestFullscreen().catch(console.error);
+            // การเปิดโหมดเต็มหน้าจอจะเกิดขึ้นเมื่อผู้ใช้คลิกปุ่ม
+            var fullscreenButton = document.getElementById('fullscreen-button');
+            fullscreenButton.addEventListener('click', function() {
+                document.documentElement.requestFullscreen().catch(console.error);
+            });
         }
 
         // ตรวจสอบว่าเป็นอุปกรณ์มือถือหรือไม่
