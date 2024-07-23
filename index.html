@@ -69,6 +69,18 @@
         canvas.style.position = "fixed";
 
         document.body.style.textAlign = "left";
+
+        // Check if the device is in landscape mode
+        window.addEventListener('orientationchange', function() {
+          if (window.orientation === 0) {
+            alert('Please rotate your device to landscape mode');
+            window.addEventListener('orientationchange', function() {
+              if (window.orientation !== 0) {
+                location.reload();
+              }
+            });
+          }
+        });
       }
     }
 
