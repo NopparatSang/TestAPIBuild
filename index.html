@@ -83,6 +83,8 @@
                 // devicePixelRatio: 1, // Uncomment this to override low DPI rendering on high DPI displays.
             }).then((unityInstance) => {
                 console.log("Unity instance created successfully");
+                enterFullscreen();
+                enterLockOrientation();
             }).catch((err) => {
                 console.error("Error creating Unity instance:", err);
             });
