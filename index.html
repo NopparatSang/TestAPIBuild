@@ -20,8 +20,7 @@
             top: 0;
             left: 0;
         }
-        #rotate-device {
-            display: none;
+        #instructions {
             position: absolute;
             width: 100%;
             height: 100%;
@@ -34,28 +33,13 @@
             top: 0;
             left: 0;
             z-index: 1000;
-        }
-        @media only screen and (orientation: portrait) {
-            #rotate-device {
-                display: flex;
-            }
-            #unity-canvas {
-                display: none;
-            }
-        }
-        @media only screen and (orientation: landscape) {
-            #rotate-device {
-                display: none;
-            }
-            #unity-canvas {
-                display: block;
-            }
+            display: flex;
         }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <div id="rotate-device">Please rotate your device to landscape mode.</div>
+    <div id="instructions">Tap anywhere to enter fullscreen mode and rotate your device to landscape.</div>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
@@ -64,16 +48,13 @@
                 doc.requestFullscreen().catch(console.error);
             } else if (doc.webkitRequestFullscreen) { // Safari
                 doc.webkitRequestFullscreen();
-            } else if (doc.mozRequestFullScreen) { // Firefox
-                doc.mozRequestFullScreen();
-            } else if (doc.msRequestFullscreen) { // IE/Edge
-                doc.msRequestFullscreen();
             }
         }
 
         function setupFullscreen() {
             document.addEventListener('click', () => {
                 enterFullscreen();
+                document.getElementById('instructions').style.display = 'none';
             });
 
             document.addEventListener('touchstart', enterFullscreen);
