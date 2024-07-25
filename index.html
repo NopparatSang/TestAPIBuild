@@ -1,134 +1,49 @@
 <!DOCTYPE html>
-<html lang="en-us">
+<html lang="en">
 <head>
-    <meta charset="utf-8">
-    <meta http-equiv="Content-Type" content="text/html; charset=utf-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
-    <title>Unity WebGL Player | MyBarStory</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Fullscreen Example</title>
     <style>
-        body {
+        html, body {
             margin: 0;
             padding: 0;
+            height: 100%;
             overflow: hidden;
-            text-align: center;
         }
-        canvas {
-            background: #231F20;
-            width: 100vw;
-            height: 100vh;
-            position: absolute;
-            top: 0;
-            left: 0;
-        }
-        #fullscreenButton {
-            position: absolute;
-            top: 10px;
-            right: 10px;
-            z-index: 1000;
-            padding: 10px 20px;
-            background-color: #000;
-            color: #fff;
-            border: none;
-            cursor: pointer;
+        #content {
+            width: 100%;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            background-color: #f0f0f0;
         }
     </style>
 </head>
 <body>
-    <canvas id="unity-canvas" tabindex="-1"></canvas>
-    <button id="fullscreenButton">Go Fullscreen</button>
-    <script src="Build/TestAPIBuild.loader.js"></script>
+    <div id="content">
+        <button id="fullscreenBtn">Go Fullscreen</button>
+    </div>
     <script>
-        function enterFullscreen() {
-            if (!document.fullscreenElement) {
-                document.documentElement.requestFullscreen().catch(console.error);
+        document.getElementById('fullscreenBtn').addEventListener('click', function() {
+            let elem = document.documentElement;
+            if (elem.requestFullscreen) {
+                elem.requestFullscreen();
+            } else if (elem.mozRequestFullScreen) { // Firefox
+                elem.mozRequestFullScreen();
+            } else if (elem.webkitRequestFullscreen) { // Chrome, Safari, Opera
+                elem.webkitRequestFullscreen();
+            } else if (elem.msRequestFullscreen) { // IE/Edge
+                elem.msRequestFullscreen();
             }
-        }
+        });
 
-        function exitFullscreen() {
-            if (document.fullscreenElement) {
-                document.exitFullscreen().catch(console.error);
-            }
-        }
-
-        function enterLockOrientation() {
-            screen.orientation.lock('landscape').catch(console.error);
-        }
-
-        function setupFullscreenAndOrientation() {
-            document.addEventListener('click', () => {
-                enterFullscreen();
-            });
-
-            document.addEventListener('touchstart', () => {
-                enterFullscreen();
-                enterLockOrientation();
-            });
-
-            document.addEventListener('keydown', () => {
-                enterFullscreen();
-                enterLockOrientation();
-            });
-        }
-
-        function toggleFullscreen() {
-            let elem = document.getElementById('unity-canvas');
-            if (!document.fullscreenElement) {
-                elem.requestFullscreen().catch((err) => {
-                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
-                });
-            } else {
-                document.exitFullscreen();
-            }
-        }
-
-        function onMobile() {
-            var meta = document.createElement('meta');
-            meta.name = 'viewport';
-            meta.content = 'width=device-width, height=device-height, initial-scale=1.0, user-scalable=no, shrink-to-fit=yes';
-            document.getElementsByTagName('head')[0].appendChild(meta);
-
-            var canvas = document.getElementById('unity-canvas');
-            canvas.style.width = "100vw";
-            canvas.style.height = "100vh";
-            canvas.style.position = "absolute";
-            canvas.style.top = "0";
-            canvas.style.left = "0";
-
-            setupFullscreenAndOrientation();
-        }
-
-        function onDesktop() {
-            var canvas = document.getElementById('unity-canvas');
-            canvas.style.width = "100vw";
-            canvas.style.height = "100vh";
-            canvas.style.position = "absolute";
-            canvas.style.top = "0";
-            canvas.style.left = "0";
-
-            setupFullscreenAndOrientation();
-        }
-
-        document.addEventListener('DOMContentLoaded', function() {
-            createUnityInstance(document.querySelector("#unity-canvas"), {
-                dataUrl: "Build/TestAPIBuild.data",
-                frameworkUrl: "Build/TestAPIBuild.framework.js",
-                codeUrl: "Build/TestAPIBuild.wasm",
-                streamingAssetsUrl: "StreamingAssets",
-                companyName: "DefaultCompany",
-                productName: "MyBarStory",
-                productVersion: "0.1",
-            }).then((unityInstance) => {
-                console.log("Unity instance created successfully");
-                if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
-                    onMobile();
-                } else {
-                    onDesktop();
-                }
-            }).catch((err) => {
-                console.error("Error creating Unity instance:", err);
-            });
-
-            document.getElementById('fullscreenButton').addEventListener('click', toggleFullscreen);
+        // Hide the status bar on iOS Safari
+        window.addEventListener('load', function() {
+            setTimeout(function() {
+                window.scrollTo(0, 1);
+            }, 0);
         });
     </script>
 </body>
