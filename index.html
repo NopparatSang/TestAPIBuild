@@ -20,15 +20,33 @@
             top: 0;
             left: 0;
         }
+        #fullscreenButton {
+            position: absolute;
+            top: 10px;
+            right: 10px;
+            z-index: 1000;
+            padding: 10px 20px;
+            background-color: #000;
+            color: #fff;
+            border: none;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
     <canvas id="unity-canvas" tabindex="-1"></canvas>
+    <button id="fullscreenButton">Go Fullscreen</button>
     <script src="Build/TestAPIBuild.loader.js"></script>
     <script>
         function enterFullscreen() {
             if (!document.fullscreenElement) {
                 document.documentElement.requestFullscreen().catch(console.error);
+            }
+        }
+
+        function exitFullscreen() {
+            if (document.fullscreenElement) {
+                document.exitFullscreen().catch(console.error);
             }
         }
 
@@ -45,10 +63,22 @@
                 enterFullscreen();
                 enterLockOrientation();
             });
+
             document.addEventListener('keydown', () => {
                 enterFullscreen();
                 enterLockOrientation();
             });
+        }
+
+        function toggleFullscreen() {
+            let elem = document.getElementById('unity-canvas');
+            if (!document.fullscreenElement) {
+                elem.requestFullscreen().catch((err) => {
+                    alert(`Error attempting to enable fullscreen mode: ${err.message} (${err.name})`);
+                });
+            } else {
+                document.exitFullscreen();
+            }
         }
 
         function onMobile() {
@@ -97,6 +127,8 @@
             }).catch((err) => {
                 console.error("Error creating Unity instance:", err);
             });
+
+            document.getElementById('fullscreenButton').addEventListener('click', toggleFullscreen);
         });
     </script>
 </body>
