@@ -21,12 +21,6 @@
       top: 0;
       left: 0;
     }
-    /* Safari specific styles */
-    @supports (-webkit-touch-callout: none) {
-      body {
-        height: 100vh; /* Ensure full viewport height */
-      }
-    }
     #open-url-button {
       position: absolute;
       top: 20px;
@@ -41,10 +35,48 @@
     #open-url-button:hover {
       background-color: #0056b3;
     }
+    /* Loading bar styles */
+    #loading-screen {
+      position: absolute;
+      width: 100vw;
+      height: 100vh;
+      top: 0;
+      left: 0;
+      background: #000;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 1000;
+      flex-direction: column;
+    }
+    #loading-logo {
+      width: 100px;
+      height: 100px;
+      margin-bottom: 20px;
+    }
+    #progress-bar {
+      width: 80%;
+      background-color: #555;
+      height: 20px;
+      border-radius: 10px;
+      margin-top: 20px;
+    }
+    #progress {
+      width: 0;
+      height: 100%;
+      background-color: #4CAF50;
+      border-radius: 10px;
+    }
   </style>
 </head>
 <body>
-  <canvas id="unity-canvas" width=1600 height=900 tabindex="-1"></canvas>
+  <canvas id="unity-canvas" width="1600" height="900" tabindex="-1"></canvas>
+  <div id="loading-screen">
+    <img id="loading-logo" src="images/logo.jpg" alt="Loading Logo">
+    <div id="progress-bar">
+      <div id="progress"></div>
+    </div>
+  </div>
   <button id="open-url-button">Open URL</button>
   <script src="Build/TestAPIBuild.loader.js"></script>
   <script>
@@ -78,7 +110,11 @@
       // Add event listener to the button
       document.getElementById('open-url-button').addEventListener('click', openURL);
 
-      createUnityInstance(document.querySelector("#unity-canvas"), {
+      const canvas = document.querySelector("#unity-canvas");
+      const loadingScreen = document.getElementById('loading-screen');
+      const progressBarFull = document.getElementById('progress');
+
+      createUnityInstance(canvas, {
         dataUrl: "Build/TestAPIBuild.data",
         frameworkUrl: "Build/TestAPIBuild.framework.js",
         codeUrl: "Build/TestAPIBuild.wasm",
@@ -86,6 +122,15 @@
         companyName: "DefaultCompany",
         productName: "MyBarStory",
         productVersion: "0.1",
+        onProgress: function(unityInstance, progress) {
+          console.log("Progress:", progress); // Debugging
+          progressBarFull.style.width = 100 * progress + '%';
+        }
+      }).then((unityInstance) => {
+        console.log("Unity instance created successfully."); // Debugging
+        loadingScreen.style.display = 'none';
+      }).catch((error) => {
+        console.error("Error creating Unity instance:", error);
       });
     });
   </script>
