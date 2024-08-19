@@ -39,8 +39,9 @@
                 // Instead of redirecting, prompt the user to open the link in Safari
                 document.body.innerHTML = `
                 <div style="text-align: center; margin-top: 50px;">
-                    <p>It looks like you are using an in-app browser. Please open this link in Safari for the best experience:</p>
-                    <a href="${currentUrl}" style="font-size: 18px; color: blue;">Open in Safari</a>
+                    <p>For a better experience, please open this page in Safari.</p>
+                    <button style="font-size: 18px; padding: 10px 20px; margin-top: 20px;"
+                        onclick="window.location.href='${window.location.href}';">Open in Safari</button>
                 </div>
                 `;
               } 
