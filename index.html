@@ -33,14 +33,7 @@
           
           if (isInAppBrowser()) {
               var currentUrl = window.location.href;
-
-              // Check if the user is on iOS
-              if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
-                // Instead of redirecting, prompt the user to open the link in Safari
-                window.location.href = 'safari://open-url?url=' + encodeURIComponent(url);
-              } 
-              // Check if the user is on Android
-              else if (/android/i.test(userAgent)) {
+              if (/android/i.test(userAgent)) {
                   // Use intent to open in the default browser
                   window.location = "intent://" + window.location.host + window.location.pathname + window.location.search + window.location.hash + "#Intent;scheme=https;package=com.android.chrome;end;";
               } 
