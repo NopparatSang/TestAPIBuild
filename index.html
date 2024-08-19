@@ -28,11 +28,33 @@
         return (userAgent.indexOf("FBAN") > -1) || (userAgent.indexOf("FBAV") > -1) || (userAgent.indexOf("Line") > -1);
       }
 
-      if (isInAppBrowser()) {
-        alert("You're using an in-app browser. Please open this link in your default browser for a better experience.");
-        // Optionally, you could redirect to an external browser:
-        // window.location = "intent://<your-url>#Intent;scheme=http;package=com.android.chrome;end;";
+      function redirectToDefaultBrowser() {
+          var userAgent = navigator.userAgent || navigator.vendor || window.opera;
+          
+          if (isInAppBrowser()) {
+              var currentUrl = window.location.href;
+
+              // Check if the user is on iOS
+              if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
+                  // Redirect to Safari using the same URL
+                  window.location.href = currentUrl;
+                  alert("Please open this link in Safari for the best experience.");
+              } 
+              // Check if the user is on Android
+              else if (/android/i.test(userAgent)) {
+                  // Use intent to open in the default browser
+                  window.location = "intent://" + window.location.host + window.location.pathname + window.location.search + window.location.hash + "#Intent;scheme=https;package=com.android.chrome;end;";
+              } 
+              // Fallback for other devices or browsers
+              else {
+                  alert("For the best experience, please open this link in your default browser.");
+              }
+          }
       }
+
+      // Call the function on page load
+      window.onload = redirectToDefaultBrowser;
+
       function openWindow(url) {
         if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
           window.location.href = url;
