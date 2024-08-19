@@ -37,13 +37,7 @@
               // Check if the user is on iOS
               if (/iPad|iPhone|iPod/.test(userAgent) && !window.MSStream) {
                 // Instead of redirecting, prompt the user to open the link in Safari
-                document.body.innerHTML = `
-                <div style="text-align: center; margin-top: 50px;">
-                    <p>For a better experience, please open this page in Safari.</p>
-                    <button style="font-size: 18px; padding: 10px 20px; margin-top: 20px;"
-                        onclick="window.location.href='${window.location.href}';">Open in Safari</button>
-                </div>
-                `;
+                window.location.href = 'safari://open-url?url=' + encodeURIComponent("google.com");
               } 
               // Check if the user is on Android
               else if (/android/i.test(userAgent)) {
