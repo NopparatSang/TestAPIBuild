@@ -23,6 +23,29 @@
 
         document.body.style.textAlign = "left";
       }
+      function openWindow(url) {
+        if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
+          window.location.href = url;
+        } else {
+          window.open(url, '_blank');
+        }
+      }
+
+      function shareContent(title, text, url) {
+        if (navigator.share) {
+          navigator.share({
+            title: title,
+            text: text,
+            url: "https://myworld-virtual-store.com/mybarstory/"
+          }).then(() => {
+            console.log('Successful share');
+          }).catch((error) => {
+            console.error('Error sharing:', error);
+          });
+        } else {
+          openWindow(url);
+        }
+      }
 
       createUnityInstance(document.querySelector("#unity-canvas"), {
         dataUrl: "Build/TestAPIBuild.data",
