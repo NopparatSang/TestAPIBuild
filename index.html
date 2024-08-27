@@ -13,15 +13,15 @@
       if (navigator.share) {
         navigator.share({
           title: title,
-          text: "มาร่วมสนุกกับเกมส์ MY BAR STORY สะสม Coins ไปแลกของรางวัลได้เพียบ",
-          url: "https://myworld-virtual-store.com/mybarstory/"
+          text: text,
+          url: url
         }).then(() => {
           console.log('Successful share');
         }).catch((error) => {
           console.error('Error sharing:', error);
         });
       } else {
-        openWindow("https://myworld-virtual-store.com/mybarstory/");
+        openWindow(url);
       }
     }
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
