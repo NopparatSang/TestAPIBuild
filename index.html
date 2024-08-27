@@ -20,8 +20,19 @@
             console.error('Error sharing:', error);
           });
         } else {
-          console.log('Web Share API not supported.');
+          // Copy text to clipboard if Web Share API is not supported
+          copyToClipboard(`${title}\n\n${text}`);
+          console.log('Web Share API not supported. Text copied to clipboard.');
         }
+      }
+
+      function copyToClipboard(text) {
+        const textarea = document.createElement('textarea');
+        textarea.value = text;
+        document.body.appendChild(textarea);
+        textarea.select();
+        document.execCommand('copy');
+        document.body.removeChild(textarea);
       }
       if (/iPhone|iPad|iPod|Android/i.test(navigator.userAgent)) {
         // Mobile device style: fill the whole browser client area with the game canvas:
